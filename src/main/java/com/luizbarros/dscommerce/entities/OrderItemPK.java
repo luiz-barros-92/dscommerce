@@ -17,7 +17,6 @@ public class OrderItemPK {
     @JoinColumn(name = "product_id")
 	private Product product;
 	
-	
 	public OrderItemPK() {
 	}
 	
@@ -52,6 +51,5 @@ public class OrderItemPK {
 			return false;
 		OrderItemPK other = (OrderItemPK) obj;
 		return Objects.equals(order, other.order) && Objects.equals(product, other.product);
-	}
-	
+	}	
 }
