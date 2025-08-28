@@ -14,7 +14,7 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
-	@Transactional
+	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
 		Product product = repository.findById(id).get();
 		return new ProductDTO(product);
