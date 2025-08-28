@@ -7,8 +7,10 @@ import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "tb_category")
 public class Category {
 
 	@Id

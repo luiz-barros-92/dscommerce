@@ -1,4 +1,6 @@
-package com.luizbarros.dscommerce.entities;
+package com.luizbarros.dscommerce.dto;
+
+import com.luizbarros.dscommerce.entities.Product;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
