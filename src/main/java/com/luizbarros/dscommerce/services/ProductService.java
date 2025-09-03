@@ -62,10 +62,10 @@ public class ProductService {
 			throw new ResourceNotFoundException("Resource not found");
 		}
 		try {
-	        	repository.deleteById(id);    		
+	        repository.deleteById(id);    		
 		}
-	    	catch (DataIntegrityViolationException e) {
-	        	throw new DatabaseException("Referential integrity violation");
+	    catch (DataIntegrityViolationException e) {
+	        throw new DatabaseException("Referential integrity violation");
 	   	}
 	}
 	
