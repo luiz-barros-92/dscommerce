@@ -33,3 +33,8 @@ My personal project of developing the back-end of DSCommerce, built during the J
 | Anonymous User | Can perform use cases in the public areas of the system, such as catalog, shopping cart, login, and sign up. |
 | Customer | Responsible for maintaining their own personal data in the system and can view their order history. Every user registered is a Customer by default. |
 | Admin | Responsible for accessing the administrative area of the system with registrations and reports. Admin can also do everything a Customer can do. |
+<br>
+<br>
+
+## User-Role Model
+![img](https://github.com/luiz-barros-92/assets/blob/main/dscommerce/user-role-model.png)
