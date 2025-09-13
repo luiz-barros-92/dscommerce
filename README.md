@@ -38,3 +38,8 @@ My personal project of developing the back-end of DSCommerce, built during the J
 
 ## User-Role Model
 ![img](https://github.com/luiz-barros-92/assets/blob/main/dscommerce/user-role-model.png)
+<br>
+<br>
+
+## Spring Security User Details Model
+![img](https://github.com/luiz-barros-92/assets/blob/main/dscommerce/user-details-model.png)
