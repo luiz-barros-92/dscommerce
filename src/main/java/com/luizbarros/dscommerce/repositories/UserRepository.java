@@ -11,8 +11,6 @@ import com.luizbarros.dscommerce.projections.UserDetailsProjection;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
-
-	User findById(String email);
 	
 	@Query(nativeQuery = true, value = """
 			SELECT tb_user.email AS username, tb_user.password, tb_role.id AS roleId, tb_role.authority
