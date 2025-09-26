@@ -30,7 +30,6 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', ('ROLE_CLIENT'))")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(service.findById(id));
@@ -38,8 +37,7 @@ public class ProductController {
 	
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(
-			@RequestParam(defaultValue = "") String name,
-			Pageable pageable) {
+			@RequestParam(defaultValue = "") String name, Pageable pageable) {
 		return ResponseEntity.ok(service.findAll(name, pageable)) ;
 	}
 	
