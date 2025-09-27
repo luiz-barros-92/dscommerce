@@ -1,8 +1,11 @@
 package com.luizbarros.dscommerce.dto;
 
+import java.util.List;
+
 import com.luizbarros.dscommerce.entities.Product;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
@@ -19,8 +22,10 @@ public record ProductDTO(
 		
 		@Positive(message = "Price must be positive")
 		Double price,
+		String imgUrl,
 		
-		String imgUrl) {
+		@NotEmpty(message = "Product must have at least one category")
+		List<CategoryDTO> categories) {
 
 		public ProductDTO(Product entity) {
 			this(
@@ -28,6 +33,8 @@ public record ProductDTO(
 				entity.getName(),
 				entity.getDescription(),
 				entity.getPrice(),
-				entity.getImgUrl());
+				entity.getImgUrl(),				
+				entity.getCategories().stream().map(CategoryDTO::new).toList()
+			);
 		}
 }
