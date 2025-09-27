@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public record ProductDTO(Long id,
+public record ProductDTO(
+		Long id,
 		
 		@NotBlank(message = "Required field")
 		@Size(min = 3, max = 80, message = "Name must have from 3 to 80 characters")
