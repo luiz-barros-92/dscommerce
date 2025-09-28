@@ -7,13 +7,13 @@ import com.luizbarros.dscommerce.entities.Role;
 import com.luizbarros.dscommerce.entities.User;
 
 public record UserDTO(
-		Long id,
-	    String name,
-	    String email,
-	    String phone,
-	    LocalDate birthDate,
-	    List<String> roles
-) {
+	Long id,
+    String name,
+    String email,
+    String phone,
+    LocalDate birthDate,
+    List<String> roles) {
+	
 	public UserDTO(User entity) {
 		this(
 			entity.getId(),
