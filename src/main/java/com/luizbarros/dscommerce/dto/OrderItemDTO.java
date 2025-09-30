@@ -6,14 +6,16 @@ public record OrderItemDTO(
 	Long productId,
 	String name,
 	Double price,
-	Integer quantity) {
+	Integer quantity,
+	String imgUrl) {
 	
 	public OrderItemDTO(OrderItem entity) {
 		this(
 			entity.getProduct().getId(),
 			entity.getProduct().getName(),
 			entity.getPrice(),
-			entity.getQuantity());		
+			entity.getQuantity(),
+			entity.getProduct().getImgUrl());		
 	}
 	
 	public Double getSubTotal() {
