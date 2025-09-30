@@ -3,7 +3,7 @@ package com.luizbarros.dscommerce.dto;
 import com.luizbarros.dscommerce.entities.OrderItem;
 
 public record OrderItemDTO(
-	Long id,
+	Long productId,
 	String name,
 	Double price,
 	Integer quantity) {
