@@ -6,20 +6,22 @@ import com.luizbarros.dscommerce.entities.Product;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record ProductDTO(
 	Long id,
 	
-	@NotBlank(message = "Required field")
+	@NotBlank(message = "Name is required")
 	@Size(min = 3, max = 80, message = "Name must have from 3 to 80 characters")
 	String name,
 	
-	@NotBlank(message = "Required field")
+	@NotBlank(message = "Description is required")
 	@Size(min = 10, message = "Description must have at least 10 characters") 
 	String description,
 	
+	@NotNull(message = "Price is required")
 	@Positive(message = "Price must be positive")
 	Double price,
 	String imgUrl,
