@@ -8,7 +8,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,11 +62,14 @@ public class AuthorizationServerConfig {
 
 	@Value("${security.jwt.duration}")
 	private Integer jwtDurationSeconds;
+	
+	private final UserDetailsService userDetailsService;
+	
+    public AuthorizationServerConfig(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 
-	@Autowired
-	private UserDetailsService userDetailsService;
-
-    @Bean
+	@Bean
     @Order(2)
     SecurityFilterChain asSecurityFilterChain(HttpSecurity http) throws Exception {
 

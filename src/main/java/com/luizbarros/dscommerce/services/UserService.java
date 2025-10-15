@@ -2,7 +2,6 @@ package com.luizbarros.dscommerce.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +18,13 @@ import com.luizbarros.dscommerce.projections.UserDetailsProjection;
 import com.luizbarros.dscommerce.repositories.UserRepository;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService{	
 	
-	@Autowired
-	private UserRepository repository;
+	private final UserRepository repository;	
+
+	public UserService(UserRepository repository) {
+		this.repository = repository;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

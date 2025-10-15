@@ -2,7 +2,6 @@ package com.luizbarros.dscommerce.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,12 +10,14 @@ import com.luizbarros.dscommerce.entities.Category;
 import com.luizbarros.dscommerce.repositories.CategoryRepository;
 
 @Service
-public class CategoryService {
+public class CategoryService {	
 	
-	@Autowired
-	private CategoryRepository repository;
-	
-	
+	private final CategoryRepository repository;
+		
+	public CategoryService(CategoryRepository repository) {
+		this.repository = repository;
+	}
+
 	@Transactional(readOnly = true)
 	public List<CategoryDTO> findAll() {
 		List<Category> result = repository.findAll();

@@ -2,7 +2,6 @@ package com.luizbarros.dscommerce.services;
 
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,23 +18,27 @@ import com.luizbarros.dscommerce.repositories.ProductRepository;
 import com.luizbarros.dscommerce.services.exceptions.ResourceNotFoundException;
 
 @Service
-public class OrderService {
+public class OrderService {	
 	
-	@Autowired
-	private OrderRepository repository;
+	private final OrderRepository repository;	
+	private final UserService service;	
+	private final ProductRepository productRepository;	
+	private final OrderItemRepository orderItemRepository;	
+	private final AuthService authService;	
 	
-	@Autowired
-	private UserService service;
-	
-	@Autowired
-	private ProductRepository productRepository;
-	
-	@Autowired
-	private OrderItemRepository orderItemRepository;
-	
-	@Autowired
-	private AuthService authService;
-	
+	public OrderService(
+			OrderRepository repository, 
+			UserService service, 
+			ProductRepository productRepository,
+			OrderItemRepository orderItemRepository, 
+			AuthService authService) {
+		this.repository = repository;
+		this.service = service;
+		this.productRepository = productRepository;
+		this.orderItemRepository = orderItemRepository;
+		this.authService = authService;
+	}
+
 	@Transactional(readOnly = true)
 	public OrderDTO findById(Long id) {
 		Order order = repository.findById(id)
