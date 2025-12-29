@@ -2,6 +2,7 @@ package com.luizbarros.dscommerce.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.luizbarros.dscommerce.dto.ProductDTO;
 import com.luizbarros.dscommerce.entities.Product;
 import com.luizbarros.dscommerce.repositories.ProductRepository;
+import com.luizbarros.dscommerce.services.exceptions.ResourceNotFoundException;
 import com.luizbarros.dscommerce.tests.ProductFactory;
 
 @ExtendWith(SpringExtension.class)
@@ -39,6 +41,7 @@ public class ProductServiceTests {
 		product = ProductFactory.createProduct(productName);
 		
 		when(repository.findById(existingProductId)).thenReturn(Optional.of(product));
+		when(repository.findById(nonExistingProductId)).thenReturn(Optional.empty());
 	}
 	
 	@Test
@@ -47,6 +50,13 @@ public class ProductServiceTests {
 		assertNotNull(result);
 		assertEquals(result.id(), existingProductId);
 		assertEquals(result.name(), product.getName());
+	}
+	
+	@Test
+	public void findByIdShouldReturnResourceNotFoundExceptionWhenIdDoesNotExists() {
+		assertThrows(ResourceNotFoundException.class, () -> {
+			service.findById(nonExistingProductId);
+		});
 	}
 
 }
