@@ -39,6 +39,7 @@ public class ProductServiceTests {
 	private Long existingProductId, nonExistingProductId;
 	private String productName;
 	private Product product;
+	private ProductDTO productDTO;
 	private PageImpl<Product> page;
 	
 	@BeforeEach
@@ -47,11 +48,13 @@ public class ProductServiceTests {
 		nonExistingProductId = 10000L;
 		productName = "Playstation 5";
 		product = ProductFactory.createProduct(productName);
+		productDTO = new ProductDTO(product);
 		page = new PageImpl<>(List.of(product));
 		
 		when(repository.findById(existingProductId)).thenReturn(Optional.of(product));
 		when(repository.findById(nonExistingProductId)).thenReturn(Optional.empty());
 		when(repository.searchByName(any(), (Pageable)any())).thenReturn(page);
+		when(repository.save(any())).thenReturn(product);
 	}
 	
 	@Test
@@ -77,5 +80,11 @@ public class ProductServiceTests {
 		assertEquals(result.getSize(), 1);
 		assertEquals(result.iterator().next().name(), productName);
 	}
-
+	
+	@Test
+	public void insertShouldReturnProductDTO() {
+		ProductDTO result = service.insert(productDTO);
+		assertNotNull(result);
+		assertEquals(product.getId(), result.id());
+	}
 }
