@@ -27,6 +27,8 @@ import com.luizbarros.dscommerce.repositories.ProductRepository;
 import com.luizbarros.dscommerce.services.exceptions.ResourceNotFoundException;
 import com.luizbarros.dscommerce.tests.ProductFactory;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
 	
@@ -55,6 +57,8 @@ public class ProductServiceTests {
 		when(repository.findById(nonExistingProductId)).thenReturn(Optional.empty());
 		when(repository.searchByName(any(), (Pageable)any())).thenReturn(page);
 		when(repository.save(any())).thenReturn(product);
+		when(repository.getReferenceById(existingProductId)).thenReturn(product);
+		when(repository.getReferenceById(nonExistingProductId)).thenThrow(EntityNotFoundException.class);
 	}
 	
 	@Test
@@ -66,7 +70,7 @@ public class ProductServiceTests {
 	}
 	
 	@Test
-	public void findByIdShouldReturnResourceNotFoundExceptionWhenIdDoesNotExists() {
+	public void findByIdShouldReturnResourceNotFoundExceptionWhenIdDoesNotExist() {
 		assertThrows(ResourceNotFoundException.class, () -> {
 			service.findById(nonExistingProductId);
 		});
@@ -85,6 +89,21 @@ public class ProductServiceTests {
 	public void insertShouldReturnProductDTO() {
 		ProductDTO result = service.insert(productDTO);
 		assertNotNull(result);
-		assertEquals(product.getId(), result.id());
+		assertEquals(result.id(), product.getId());
+	}
+	
+	@Test
+	public void updateShouldProductDTOWhenIdExists() {
+		ProductDTO result = service.update(existingProductId, productDTO);
+		assertNotNull(result);
+		assertEquals(result.id(), existingProductId);
+		assertEquals(result.name(), productDTO.name());
+	}
+	
+	@Test
+	public void updateShouldReturnResourceNotFoundExceptionWhenIdDoesNotExist() {
+		assertThrows(ResourceNotFoundException.class, () -> {
+			service.update(nonExistingProductId, productDTO);
+		});
 	}
 }
