@@ -2,12 +2,9 @@ package com.luizbarros.dscommerce.services;
 
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +13,17 @@ import com.luizbarros.dscommerce.entities.Role;
 import com.luizbarros.dscommerce.entities.User;
 import com.luizbarros.dscommerce.projections.UserDetailsProjection;
 import com.luizbarros.dscommerce.repositories.UserRepository;
+import com.luizbarros.dscommerce.util.CustomUserUtil;
 
 @Service
 public class UserService implements UserDetailsService{	
 	
-	private final UserRepository repository;	
+	private final UserRepository repository;
+	private final CustomUserUtil customUserUtil;
 
 	public UserService(UserRepository repository) {
 		this.repository = repository;
+		this.customUserUtil = new CustomUserUtil();
 	}
 
 	@Override
@@ -42,10 +42,8 @@ public class UserService implements UserDetailsService{
 	}
 	
 	protected User authenticated() {
-		try {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-			String username = jwtPrincipal.getClaim("username");
+		try {			
+			String username = customUserUtil.getLoggedUsername();
 			return repository.findByEmail(username).get();
 		}
 		catch(Exception e) {
