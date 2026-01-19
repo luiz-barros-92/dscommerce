@@ -3,10 +3,12 @@ package com.luizbarros.dscommerce.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import com.luizbarros.dscommerce.projections.UserDetailsProjection;
 import com.luizbarros.dscommerce.repositories.UserRepository;
 import com.luizbarros.dscommerce.tests.UserDetailsFactory;
 import com.luizbarros.dscommerce.tests.UserFactory;
+import com.luizbarros.dscommerce.util.CustomUserUtil;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTests {
@@ -32,13 +35,16 @@ public class UserServiceTests {
 	@Mock
 	private UserRepository repository;
 	
+	@Mock
+	private CustomUserUtil customUserUtil;
+	
 	private String existingUsername, nonExistingUsername;
 	private User user;	
 	private List<UserDetailsProjection> userDetails;
 	
 	@BeforeEach
 	void setup() throws Exception {
-		existingUsername = "abreu@gmail.com";
+		existingUsername = "alex@gmail.com";
 		nonExistingUsername = "nemeu@gmail.com";
 		
 		user = UserFactory.createCustomClientUser(1L, existingUsername);
@@ -46,6 +52,9 @@ public class UserServiceTests {
 		
 		when(repository.searchUserAndRolesByEmail(existingUsername)).thenReturn(userDetails);
 		when(repository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(new ArrayList<>());
+		
+		when(repository.findByEmail(existingUsername)).thenReturn(Optional.of(user));
+		when(repository.findByEmail(nonExistingUsername)).thenReturn(Optional.empty());
 	}
 	
 	@Test
@@ -61,4 +70,22 @@ public class UserServiceTests {
 			service.loadUserByUsername(nonExistingUsername);
 		});
 	}
+	
+	@Test	
+	public void authenticatedShouldReturnUserWhenUserExists() {
+		when(customUserUtil.getLoggedUsername()).thenReturn(existingUsername);
+		User result = service.authenticated();
+		
+		assertNotNull(result);
+		assertEquals(result.getUsername(), existingUsername);
+	}
+	
+	@Test
+	public void authenticatedShouldThrowUsernameNotFoundExceptionWhenUserDoesNotExist() {
+		doThrow(ClassCastException.class).when(customUserUtil).getLoggedUsername();
+		
+		assertThrows(UsernameNotFoundException.class, () -> {
+			service.authenticated();
+		});		
+	}	
 }
