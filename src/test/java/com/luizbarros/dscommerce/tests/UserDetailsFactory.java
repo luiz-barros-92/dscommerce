@@ -13,7 +13,7 @@ public class UserDetailsFactory {
 	    return list;
 	  }
 	
-	public static List<UserDetailsProjection> createCustomAdmintUser(String username) {
+	public static List<UserDetailsProjection> createCustomAdminUser(String username) {
 	    List<UserDetailsProjection> list = new ArrayList<>();
 	    list.add(new UserDetailsProjectionImpl(username, "123", 2L, "ROLE_ADMIN"));
 	    return list;

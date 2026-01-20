@@ -44,11 +44,11 @@ public class UserServiceTests {
 	
 	@BeforeEach
 	void setup() throws Exception {
-		existingUsername = "alex@gmail.com";
+		existingUsername = "abreu@gmail.com";
 		nonExistingUsername = "nemeu@gmail.com";
 		
 		user = UserFactory.createCustomClientUser(1L, existingUsername);
-		userDetails = UserDetailsFactory.createCustomAdmintUser(existingUsername);
+		userDetails = UserDetailsFactory.createCustomAdminUser(existingUsername);
 		
 		when(repository.searchUserAndRolesByEmail(existingUsername)).thenReturn(userDetails);
 		when(repository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(new ArrayList<>());

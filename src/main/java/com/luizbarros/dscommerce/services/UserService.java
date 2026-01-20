@@ -21,9 +21,9 @@ public class UserService implements UserDetailsService{
 	private final UserRepository repository;
 	private final CustomUserUtil customUserUtil;
 
-	public UserService(UserRepository repository) {
+	public UserService(UserRepository repository, CustomUserUtil customUserUtil) {
 		this.repository = repository;
-		this.customUserUtil = new CustomUserUtil();
+		this.customUserUtil = customUserUtil;
 	}
 
 	@Override
