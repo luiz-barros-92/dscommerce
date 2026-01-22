@@ -3,6 +3,7 @@ package com.luizbarros.dscommerce.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -15,10 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.luizbarros.dscommerce.dto.UserDTO;
 import com.luizbarros.dscommerce.entities.User;
 import com.luizbarros.dscommerce.projections.UserDetailsProjection;
 import com.luizbarros.dscommerce.repositories.UserRepository;
@@ -86,6 +89,29 @@ public class UserServiceTests {
 		
 		assertThrows(UsernameNotFoundException.class, () -> {
 			service.authenticated();
-		});		
-	}	
+		});
+	}
+	
+	@Test
+	public void getMeShouldReturnUserDTOWhenUserAuthenticated() {
+		UserService spyUserService = Mockito.spy(service);
+		doReturn(user).when(spyUserService).authenticated();
+		
+		UserDTO result = spyUserService.getMe();
+		
+		assertNotNull(result);
+		assertEquals(result.email(), existingUsername);
+		
+	}
+	
+	@Test
+	public void getMeShouldReturnUsernameNotFoundExceptionWhenUserNotAuthenticated() {
+		UserService spyUserService = Mockito.spy(service);
+		doThrow(UsernameNotFoundException.class).when(spyUserService).authenticated();
+		
+		assertThrows(UsernameNotFoundException.class, () -> {
+			@SuppressWarnings("unused")
+			UserDTO result = spyUserService.getMe();
+		});
+	}
 }
