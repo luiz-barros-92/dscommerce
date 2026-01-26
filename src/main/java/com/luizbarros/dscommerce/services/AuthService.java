@@ -14,7 +14,7 @@ public class AuthService {
 		this.userService = userService;
 	}
 
-	public void validateSelfOrAdmin(long userId) {
+	public void validateSelfOrAdmin(Long userId) {
 		User user = userService.authenticated();
 		if (user.hasRole("ROLE_ADMIN")) {
 			return;
