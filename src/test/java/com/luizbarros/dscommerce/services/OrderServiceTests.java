@@ -21,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.luizbarros.dscommerce.dto.OrderDTO;
 import com.luizbarros.dscommerce.entities.Order;
+import com.luizbarros.dscommerce.entities.OrderItem;
 import com.luizbarros.dscommerce.entities.Product;
 import com.luizbarros.dscommerce.entities.User;
 import com.luizbarros.dscommerce.repositories.OrderItemRepository;
@@ -150,4 +151,17 @@ public class OrderServiceTests {
 			OrderDTO result = service.insert(orderDTO);
 		});
 	}
+	
+	@Test
+	public void insertShouldThrowsEntityNotFoundExceptionWhenOrderProductIdDoesNotExist() {
+		when(userService.authenticated()).thenReturn(client);
+		product.setId(nonExistingProductId);
+		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);
+		order.getItems().add(orderItem);
+		orderDTO = new OrderDTO(order);		
+		assertThrows(EntityNotFoundException.class, () -> {
+			OrderDTO result = service.insert(orderDTO);
+		});
+	}
+	
 }
