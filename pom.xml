@@ -96,6 +96,8 @@
 						<exclude>com/luizbarros/dscommerce/dto/**</exclude>
 						<exclude>com/luizbarros/dscommerce/controllers/handlers/**</exclude>
 						<exclude>com/luizbarros/dscommerce/services/exceptions/**</exclude>
+						<exclude>com/luizbarros/dscommerce/util/**</exclude>
+						<exclude>com/luizbarros/dscommerce/controllers/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
