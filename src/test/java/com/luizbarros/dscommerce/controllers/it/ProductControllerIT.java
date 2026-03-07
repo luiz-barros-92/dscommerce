@@ -1,6 +1,7 @@
 package com.luizbarros.dscommerce.controllers.it;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,10 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luizbarros.dscommerce.dto.ProductDTO;
+import com.luizbarros.dscommerce.entities.Category;
 import com.luizbarros.dscommerce.entities.Product;
 import com.luizbarros.dscommerce.tests.TokenUtil;
 
@@ -30,6 +33,7 @@ public class ProductControllerIT {
 	@Autowired
 	private TokenUtil tokenUtil;
 	
+	@Autowired
 	private ObjectMapper objectMapper;
 	
 	private String clientUsername, clientPassword, adminUsername, adminPassword;
@@ -51,6 +55,11 @@ public class ProductControllerIT {
 		adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
 		invalidToken = adminToken + "typo";
+		
+		Category category = new Category(2L, "Eletctronics");
+		product = new Product(null, "PlaysStation 5", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod", 3599.00, "https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/6-big.jpg");
+		product.getCategories().add(category);
+		productDTO = new ProductDTO(product);
 	}
 	
 	@Test
@@ -84,9 +93,19 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
 		ResultActions result = mockMvc
-			.perform(post("/products") //with error
+			.perform(post("/products")
 			.header("Authorization", "Bearer " + adminToken)
 			.content(jsonBody)
-			.accept(MediaType.APPLICATION_JSON));
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON))
+			.andDo(MockMvcResultHandlers.print());
+		
+		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.id").value(26L));
+		result.andExpect(jsonPath("$.name").value("PlaysStation 5"));
+		result.andExpect(jsonPath("$.description").value("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"));
+		result.andExpect(jsonPath("$.price").value(3599.00));
+		result.andExpect(jsonPath("$.imgUrl").value("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/6-big.jpg"));
+		result.andExpect(jsonPath("$.categories[0].id").value(2L));
 	}
 }
